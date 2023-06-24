@@ -69,6 +69,11 @@ The pop method for Julia arrays allow to pop the last element of the array.
 =#
 pop!(my_array_fibonacci)
 #=
+Some special indexing cases
+=#
+# The last element of a Julia array is retrieved by index = end. In Python we would have used index = -1
+println("The last element of my_array_fibonacci is: $(my_array_fibonacci[end])")
+#=
 Arrays of arrays in Julia are arrays whose elements are other arrays. 
 This is equivalent to list of lists in Python.
 =#
