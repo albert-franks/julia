@@ -11,13 +11,13 @@ Note: the global keyword is needed to modify a variable within a while loop
       as it was declared before the control flow
 =#
 n = 0
-condition = (n < 10)
-while condition
+while (n < 10)
     global n += 1
+    println("$n")
 end
 println("Exited while loop.")
 
-my_friends = ['Mark','John','Paul']
+my_friends = ["Mark","John","Paul"]
 n = length(my_friends)
 i = 1
 while (i <= n)
@@ -54,20 +54,21 @@ for i = 1:m
         M[i, j] = i*j
     end
 end
-M
+display(M)
 # We can write the same inner loop in a more compact way
 M = zeros(m, n)
 for i = 1:m, j = 1:n
     M[i, j] = i*j
 end
-M
-# Or even using an array comprehension similar to the one in Python.
+display(M)
+println("here")
+# Or even using an array comprehension similar to the one in Python. Here the comma replaces the keyword for used in Python
 M = [i*j for i = 1:m, j = 1:n]
-M
+display(M)
 # Finally, we combine a loop and a comprehension to create an increasily large matrix
 for i = 1:m
     M = [p*j for p = 1:i, j = 1:n]
-    M
+    display(M)
 end
 
 
