@@ -6,54 +6,83 @@ Aim: to replicate and expand the contents of this tutorial
 =#
 
 #=
-Similar to classes in other object oriented programming languages, structs allow to define custom types
+Similar to classes in other object oriented programming languages, structs allow to define custom types.
+A structure is define through a dedicated keyword followed by the name of the struct. 
 =#
-
+struct my_simple_struct
+    placeholder_obj_1
+    placeholder_obj_2
+end
 #=
-By calling methods() over an operator, we can see how many existing definition we have for the operator itself.
-It displays all the methods that can be used when the code uses a given operator.
+Then, we create an object of type struct
 =#
-methods(+)
+my_struct = my_simple_struct("Hello","World")
+println("The first placeholder object of this simple user defined struc is: "*my_struct.placeholder_obj_1)
+println("The second placeholder object of this simple user defined struc is: "*my_struct.placeholder_obj_2)
 #=
-The @which macro preceeding an operation displays which method is used when an operator is invoked.
-For instance, we can display the method used to perform an addition between different types
-=#
-println(@which 2 + 2)
-println(@which 2 + 2.0)
-println(@which 2.0 + 2.0)
-println(@which [2, 3] + [4, 5])
-println(@which [[1, 2],[2, 3]] + [[3,4],[4, 5]])
-#=
-In Julia we can even extend the methods that can be used with a given operator
-Assume we want to concatenate strings through the '+' operator like in Python
-First, we try and catch an error
+Note that regular stucts are immutable
 =#
 try
-    combined_string = "Hello" + "!"
-catch MethodError
-    println("Julia does not allow to concatenate strings through the + operator. Use * instead!")
+    my_struct.placeholder_obj_1 = "HELLO"
+catch setfield!
+    println("Regular structs cannot be altered!")
 end
 #=
-At this point, we construct a custom rule to allow strings concatenation via '+'
+However, Julia allows for the creation of mutable structs through a dedicated keyword
 =#
-# Import the operator from the Base.jl library
-import Base: +
-# Define the concatenation template in the following from: operator (input1::input1_type,...,inputn::inputn_type) = operation(input_1,...,input_n)
-+(x::String, y::String) = x*y
-combined_string = "Hello" + "!"
-# and observe the method that the program invokes when strings concatenation is performed via +
-println(@which "Hello" + "!")
-#=
-We can implement a multiple dispatch of a function
-=#
-foo(a, b) = println("generic input combination.")
-foo(a::Int, b::Int) = println("both inputs are integers.")
-foo(a::Float64, b::Float64) = println("both inputs are floats.")
-foo(a::Int, b::Float64) = println("one integer and one float.")
-#=
-Then we test the multiple dispatch by feeding foo() with different inputs
-=#
-inputs = [[1,1],[2.0,3.0],[1,5.0],["Mark","Paul"]]
-for input in inputs
-    foo(input[1],input[2])
+mutable struct persona
+    name::String
+    age::Float64
+    location::String
 end
+my_mutable_struct = persona("Mark",30,"Amsterdam")
+println("My name is $(my_mutable_struct.name)")
+println("I'm $(my_mutable_struct.age)")
+println("I live in $(my_mutable_struct.location)")
+#=
+We alter the objects belonging to our mutable struct
+=#
+try
+    my_mutable_struct.name = "Steve"
+    my_mutable_struct.age += 1
+    my_mutable_struct.location = "Chicago"
+catch setfield!
+    println("Mutable structs can be altered!")
+end
+println("My name is $(my_mutable_struct.name)")
+println("I'm $(my_mutable_struct.age)")
+println("I live in $(my_mutable_struct.location)")
+#=
+Default constructor
+
+Julia allows for the inclusion of a default constructor within a struct.
+The struct below (persona) is constructed through three objects: name, age, location.
+However, we can define a function named as the struct that allows to construct 
+the struct itself by declaring name and age while setting location to a default value.
+=#
+mutable struct persona
+    name::String
+    age::Float64
+    location::String
+
+    function persona(name, age)
+        new(name, age, "Zanarkand")
+    end
+end
+my_mutable_struct = persona("Tidus", 17)
+println("My name is $(my_mutable_struct.name)")
+println("I'm $(my_mutable_struct.age)")
+println("I live in $(my_mutable_struct.location)")
+#=
+Struct associated methods
+
+In Julia it is possible to define methods that allow to alter objects of a given struct.
+These methods take the struct itself as argument.
+=#
+function birthday(input_struct::persona)
+    input_struct.age += 1
+end
+birthday(my_mutable_struct)
+println("My name is $(my_mutable_struct.name)")
+println("I'm $(my_mutable_struct.age)")
+println("I live in $(my_mutable_struct.location)")
