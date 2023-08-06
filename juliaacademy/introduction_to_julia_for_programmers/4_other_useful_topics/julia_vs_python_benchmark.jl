@@ -12,16 +12,6 @@ The goal of this lecture is to benchmark some pre-built and user-defined functio
 #=
 Import libraries needed for the tasks of this program
 =#
-using Pkg
-#ENV["PYTHON"] = "D:/python_3_10/python.exe"
-#Pkg.build("PyCall")
-#Pkg.build("Conda")
-Pkg.add("PyCall")
-Pkg.add("Conda")
-Pkg.add("BenchmarkTools")
-Pkg.add("Plots")
-Pkg.add("LaTeXStrings")
-Pkg.add("PlotlyJS")
 using PyCall
 using Conda
 using BenchmarkTools
